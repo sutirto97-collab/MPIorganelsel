@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Media Interaktif IPA Kelas VIII – Pengenalan Sel</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:#f3f8fc;color:#17324d}
+header{background:#1769aa;color:white;padding:24px;text-align:center}
+nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;background:#fff;padding:12px;position:sticky;top:0;box-shadow:0 2px 7px #bbb}
+button{border:0;border-radius:10px;padding:10px 14px;background:#1769aa;color:#fff;cursor:pointer;font-weight:bold}
+button:hover{opacity:.9}
+main{max-width:1050px;margin:20px auto;padding:0 15px}
+section{background:white;border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 2px 10px #d6e2ec}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.card{border:1px solid #c9dce9;border-radius:12px;padding:14px;background:#f9fcff;cursor:pointer}
+.card:hover{background:#e9f5ff}
+#detail{min-height:100px;background:#eef8ff;border-radius:12px;padding:15px;margin-top:12px}
+.cellcompare{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.choice{display:block;width:100%;text-align:left;background:#fff;color:#17324d;border:1px solid #b9cedd;margin:8px 0}
+.correct{background:#d9f5df!important;border-color:#39a95b!important}
+.wrong{background:#ffe0e0!important;border-color:#d9534f!important}
+.feedback{font-weight:bold;margin:8px 0}
+.progress{height:12px;background:#e1e8ee;border-radius:8px;overflow:hidden}
+.bar{height:100%;width:0;background:#27ae60}
+.small{font-size:.92rem;color:#4f6475}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+select{padding:9px;border-radius:8px;border:1px solid #aaa;width:100%}
+textarea{width:100%;min-height:90px;border:1px solid #b9cedd;border-radius:10px;padding:10px;box-sizing:border-box}
+footer{text-align:center;padding:30px;color:#526}
+</style></head>
+<body>
+<header><h1>🔬 Pengenalan Sel</h1><p>IPA Kelas VIII • Pembelajaran Mendalam</p><p>Berkesadaran • Bermakna • Menggembirakan</p></header>
+<nav>
+<button onclick="show('home')">Beranda</button><button onclick="show('org')">Eksplorasi Organel</button>
+<button onclick="show('compare')">Hewan vs Tumbuhan</button><button onclick="show('quiz')">Kuis Otomatis</button>
+<button onclick="show('match')">Cocokkan Fungsi</button><button onclick="show('reflect')">Refleksi</button>
+</nav>
+<main>
+<section id="home">
+<h2>🎯 Tujuan Pembelajaran</h2>
+<ul><li>Menjelaskan sel sebagai unit kehidupan.</li><li>Mengidentifikasi organel dan fungsi utamanya.</li>
+<li>Membandingkan sel hewan dan tumbuhan.</li><li>Menghubungkan struktur dengan fungsi.</li></ul>
+<h2>💡 Tantangan Pemantik</h2>
+<p>Jika sel diibaratkan sebuah sekolah, bagian mana yang berperan seperti pusat kendali, pembangkit energi, gudang, dan gerbang?</p>
+<h3>📌 Petunjuk</h3><ol><li>Eksplorasi kartu organel.</li><li>Kerjakan kuis otomatis.</li><li>Mainkan mencocokkan organel–fungsi.</li><li>Tuliskan refleksi.</li></ol>
+</section>
+<section id="org" style="display:none">
+<h2>🔎 Eksplorasi Organel</h2><p class="small">Klik kartu organel untuk melihat fungsi dan analoginya.</p>
+<div class="grid" id="cards"></div><div id="detail">Pilih satu organel.</div>
+</section>
+<section id="compare" style="display:none">
+<h2>🌱 Sel Hewan vs Sel Tumbuhan</h2>
+<div class="cellcompare">
+<div><h3>🐾 Sel Hewan</h3><ul><li>Tidak memiliki dinding sel.</li><li>Tidak memiliki kloroplas.</li><li>Tidak memiliki vakuola sentral besar sebagai ciri.</li><li>Bentuk relatif fleksibel.</li><li>Sentriol umumnya dijumpai.</li></ul></div>
+<div><h3>🌿 Sel Tumbuhan</h3><ul><li>Memiliki dinding sel.</li><li>Memiliki kloroplas pada sel fotosintetik.</li><li>Umumnya memiliki vakuola sentral besar.</li><li>Bentuk lebih tetap karena dinding sel.</li><li>Sentriol bukan ciri umum sel tumbuhan tingkat tinggi.</li></ul></div>
+</div>
+</section>
+<section id="quiz" style="display:none">
+<h2>🧠 Kuis Otomatis</h2><div class="progress"><div class="bar" id="bar"></div></div>
+<div id="quizbox"></div><button onclick="restartQuiz()">Ulangi Kuis</button>
+</section>
+<section id="match" style="display:none">
+<h2>🧩 Cocokkan Organel dengan Fungsi</h2><p>Pilih fungsi yang paling sesuai.</p><div id="matchbox"></div><button onclick="checkMatch()">Periksa Jawaban</button>
+<div id="matchresult" class="feedback"></div>
+</section>
+<section id="reflect" style="display:none">
+<h2>🪞 Refleksi</h2>
+<label>Hal baru yang saya pahami:</label><textarea id="r1"></textarea>
+<label>Organel yang paling saya pahami dan alasannya:</label><textarea id="r2"></textarea>
+<label>Hal yang masih membingungkan:</label><textarea id="r3"></textarea>
+<button onclick="saveReflection()">Simpan Refleksi</button><p id="saved"></p>
+</section>
+</main><footer>Media pembelajaran IPA • Pengenalan Sel</footer>
+<script>
+const data=[["Membran Sel", "Mengatur keluar-masuk zat dan menjadi batas sel.", "Seperti pintu/gerbang sekolah."], ["Sitoplasma", "Medium tempat organel berada dan berbagai reaksi metabolisme berlangsung.", "Seperti ruang kerja."], ["Nukleus", "Menyimpan DNA dan mengatur berbagai aktivitas sel.", "Seperti pusat kendali."], ["Mitokondria", "Tempat utama respirasi aerob dan menghasilkan banyak ATP.", "Seperti pembangkit energi."], ["Ribosom", "Tempat sintesis protein.", "Seperti mesin perakit."], ["Retikulum Endoplasma", "Membantu sintesis dan transport molekul; RE kasar memiliki ribosom.", "Seperti jalur produksi/distribusi."], ["Badan Golgi", "Memodifikasi, menyortir, dan mengemas molekul.", "Seperti bagian pengemasan/pengiriman."], ["Lisosom", "Membantu pencernaan intraseluler dan daur ulang komponen.", "Seperti pusat daur ulang."], ["Vakuola", "Tempat penyimpanan; vakuola sentral membantu turgor pada tumbuhan.", "Seperti gudang."], ["Kloroplas", "Tempat fotosintesis pada tumbuhan dan alga.", "Seperti panel surya + pabrik makanan."], ["Dinding Sel", "Memberi bentuk, perlindungan, dan dukungan mekanis pada sel tumbuhan.", "Seperti tembok pelindung."], ["Sentriol", "Berperan dalam organisasi mikrotubulus dan pembelahan sel, terutama pada sel hewan.", "Seperti pengatur jalur rangka sel."]];
+function show(id){document.querySelectorAll('main section').forEach(s=>s.style.display='none');document.getElementById(id).style.display='block';}
+const cards=document.getElementById('cards');
+data.forEach(x=>{let d=document.createElement('div');d.className='card';d.innerHTML='<b>'+x[0]+'</b><br><span class="small">Klik untuk melihat fungsi</span>';d.onclick=()=>{document.getElementById('detail').innerHTML='<h3>'+x[0]+'</h3><p>'+x[1]+'</p><p>💡 Analogi: '+x[2]+'</p>';};cards.appendChild(d);});
+const questions=[
+["Organel yang menyimpan DNA dan mengatur aktivitas sel adalah ...",["Nukleus","Ribosom","Vakuola","Lisosom"],0],
+["Tempat utama sintesis protein adalah ...",["Mitokondria","Ribosom","Kloroplas","Badan Golgi"],1],
+["Organel fotosintesis pada sel tumbuhan adalah ...",["Kloroplas","Lisosom","Sentriol","Nukleus"],0],
+["Organel yang memodifikasi, menyortir, dan mengemas molekul adalah ...",["RE","Badan Golgi","Vakuola","Membran sel"],1],
+["Struktur yang mengatur keluar-masuk zat adalah ...",["Dinding sel","Sitoplasma","Membran sel","Ribosom"],2],
+["Organel yang berperan penting menghasilkan ATP adalah ...",["Mitokondria","Badan Golgi","Lisosom","Kloroplas"],0],
+["Vakuola sentral tumbuhan membantu ...",["sintesis DNA","turgor dan penyimpanan","pembentukan ribosom","pembelahan inti"],1],
+["Dinding sel tumbuhan terutama membantu ...",["menghasilkan ATP","memberi dukungan dan bentuk","membuat protein","mengatur DNA"],1]
+];
+let qi=0,score=0;
+function renderQuiz(){let q=questions[qi];document.getElementById('bar').style.width=(qi/questions.length*100)+'%';let h='<h3>Soal '+(qi+1)+' dari '+questions.length+'</h3><p><b>'+q[0]+'</b></p>';q[1].forEach((o,i)=>h+='<button class="choice" onclick="answer('+i+')">'+o+'</button>');document.getElementById('quizbox').innerHTML=h;}
+function answer(i){let q=questions[qi],btns=document.querySelectorAll('.choice');btns.forEach(b=>b.disabled=true);btns[q[2]].classList.add('correct');let fb=document.createElement('p');fb.className='feedback';if(i===q[2]){score++;fb.textContent='✅ Benar!'}else{btns[i].classList.add('wrong');fb.textContent='❌ Belum tepat. Jawaban benar: '+q[1][q[2]]}document.getElementById('quizbox').appendChild(fb);setTimeout(()=>{qi++;if(qi<questions.length)renderQuiz();else{document.getElementById('bar').style.width='100%';document.getElementById('quizbox').innerHTML='<h3>🎉 Selesai!</h3><p>Skor: <b>'+score+'/'+questions.length+'</b> ('+Math.round(score/questions.length*100)+'%).</p><p>'+feedback(score)+'</p>'}},800);}
+function feedback(s){if(s>=7)return'Pemahamanmu sudah kuat. Coba jelaskan hubungan antarorganel.';if(s>=5)return'Pemahaman dasar sudah cukup. Ulangi organel yang masih tertukar.';return'Kembali ke Eksplorasi Organel lalu coba kuis lagi.';}
+function restartQuiz(){qi=0;score=0;renderQuiz()} renderQuiz();
+const matchItems=[["Nukleus","Pusat kendali dan penyimpan DNA"],["Mitokondria","Penghasil banyak ATP"],["Ribosom","Sintesis protein"],["Kloroplas","Fotosintesis"],["Badan Golgi","Modifikasi dan pengemasan"],["Membran sel","Mengatur pertukaran zat"]];
+const funcs=matchItems.map(x=>x[1]).sort(()=>Math.random()-.5),mb=document.getElementById('matchbox');
+matchItems.forEach((x,i)=>{let d=document.createElement('div');d.className='match';d.innerHTML='<b>'+x[0]+'</b><select id="m'+i+'"><option value="">-- pilih fungsi --</option>'+funcs.map(f=>'<option>'+f+'</option>').join('')+'</select>';mb.appendChild(d);});
+function checkMatch(){let n=0;matchItems.forEach((x,i)=>{if(document.getElementById('m'+i).value===x[1])n++});document.getElementById('matchresult').textContent='Hasil: '+n+'/'+matchItems.length+' tepat.'+(n===matchItems.length?' 🎉 Semua benar!':' Coba periksa kembali pasangan yang salah.');}
+function saveReflection(){localStorage.setItem('refSel',JSON.stringify([r1.value,r2.value,r3.value]));document.getElementById('saved').textContent='✅ Refleksi tersimpan di perangkat ini.';}
+</script></body></html>
